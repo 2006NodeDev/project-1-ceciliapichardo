@@ -51,7 +51,7 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
 })
 
 //Find Users By Id 
-userRouter.get('/:id', authorizationMiddleware(['Admin', 'Finance Manager', 'Current']), async (req:Request, res:Response, next:NextFunction) => {
+userRouter.get('/:id', authorizationMiddleware(['Finance Manager', 'Current']), async (req:Request, res:Response, next:NextFunction) => {
     let {id} = req.params
     if(isNaN(+id)) {
         res.status(400).send('Id Needs to be a Number')

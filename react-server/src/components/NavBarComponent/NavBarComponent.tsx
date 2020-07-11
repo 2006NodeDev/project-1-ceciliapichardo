@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react';
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -45,17 +44,16 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
         //if they are logged in, add the other items
         menuItems.push(
         <MenuItem onClick={handleClose}><Link to='/title'>Title</Link></MenuItem>,
-        <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user)?props.user.userId : '0' }`}>My Profile</Link></MenuItem>)
+        <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user)?props.user.userId : '0' }`}>My Profile</Link></MenuItem>
+        )
     }
-    if(props.user && props.user.role === 'Admin'){
+    if(props.user && props.user.role.role === 'Admin'){
         menuItems.push(<MenuItem onClick={handleClose}><Link to='/users'>All Users</Link></MenuItem>)
     }
 
 
     return (
         <nav>
-
-
             <AppBar position="static">
                 <Toolbar>
                     <IconButton onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
@@ -70,8 +68,7 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
                     </Menu>
                     <Typography variant="h6" className={classes.title}>
                         Project 1
-                </Typography>
-                    <Button color="inherit">Login</Button>
+                    </Typography>
                 </Toolbar>
             </AppBar>
         </nav>

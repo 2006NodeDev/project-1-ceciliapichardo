@@ -5,12 +5,12 @@ export function corsFilter(req:Request, res:Response, next:NextFunction) {
     res.header('Access-Control-Allow-Origin', `${req.headers.origin}`);
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Authorization');
 
     if(req.method === 'OPTIONS'){
         res.sendStatus(200) // sends back options pre-flight request
     } else{
-        console.log("CORS: denied")
+        console.log("CORS: Access Allowed")
         next() // allows real requests to go to endpoint
     }
 }

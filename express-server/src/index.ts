@@ -4,12 +4,14 @@ import { userRouter } from './routers/user-router'
 import { loginWithUsernameAndPassword } from './daos/user-dao'
 import { AuthenticationFailureError } from './errors/AuthenticationFailureError'
 import { loggingMiddleware } from './middleware/logging-middleware'
+import { corsFilter } from './middleware/cors-filter'
 
 /* IDK my theme yet */
 
 const app = express() //Creates complete express application
 app.use(express.json()) //Matches every HTTP verb, middleware
 app.use(loggingMiddleware) //Logs out request method, ip address making request, and path of request
+app.use(corsFilter) //Filters HTTP requests that aren't allowed by origin
 app.use(sessionMiddleware) //Attaches a session object to the request where each unique connection to the server has a unique session
 app.use('/users', userRouter) //Redirect all requests on /users to user-router
 
