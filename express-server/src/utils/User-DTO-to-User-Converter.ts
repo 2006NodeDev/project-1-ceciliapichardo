@@ -10,6 +10,27 @@ export function UserDTOtoUserConverter(udto: UserDTO): User {
         firstName: udto.first_name,
         lastName: udto.last_name,
         email: udto.email,
+        city: {
+            city: udto.city,
+            cityId: udto.city_id,
+        },
+        state: {
+            state: udto.state,
+            stateId: udto.state_id,
+        },
+        country: {
+            country: udto.country,
+            countryId: udto.country_id
+        },
+        dogName: udto.dog_name,
+        dogSex: {
+            dogSex: udto.dog_sex,
+            sexId: udto.sex_id
+        },
+        breed: {
+            breed: udto.breed,
+            breedId: udto.breed_id
+        },
         role: {
             role: udto.role,
             roleId: udto.role_id

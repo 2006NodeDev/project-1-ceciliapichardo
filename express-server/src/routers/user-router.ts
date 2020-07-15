@@ -1,23 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express'
-import { UserInputError } from '../errors/UserInputError'
-import { getAllUsers, saveAUser, getUserById, updateUserInfo } from '../daos/user-dao'
-import { User } from '../models/User'
+import { getAllUsers, getUserById, saveAUser, updateUserInfo } from '../daos/user-dao'
 import { authenticationMiddleware } from '../middleware/authentication-middleware'
 import { authorizationMiddleware } from '../middleware/authorization-middleware'
+import { User } from '../models/User'
+import { UserInputError } from '../errors/UserInputError'
 
 export const userRouter = express.Router()
-userRouter.use(authenticationMiddleware) 
-
-
-//Find All Users 
-userRouter.get('/', authorizationMiddleware(['Admin', 'Finance Manager']), async (req:Request, res:Response, next:NextFunction) => { 
-    try {
-        let allUsers = await getAllUsers()
-        res.json(allUsers)
-    } catch (e) {
-        next(e)
-    }
-})
 
 //Create New Users
 userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
@@ -27,8 +15,15 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
         firstName,
         lastName,
         email,
-        role } = req.body
-    if(username && password && firstName && lastName && email && role) {
+        city,
+        state,
+        //country,
+        dogName,
+        dogSex,
+        breed
+        //, role 
+    } = req.body
+    if(username && password && firstName && lastName && email && city && state && dogName && dogSex && breed) {
         let newUser: User = {
             userId: 0,
             username,
@@ -36,7 +31,19 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
             firstName,
             lastName,
             email,
-            role
+            city,
+            state,
+            country: {
+                countryId: 1,
+                country: 'USA'
+            },
+            dogName,
+            dogSex,
+            breed,
+            role: {
+                roleId: 2,
+                role: 'User'
+            }
         }
         try {
             let savedUser = await saveAUser(newUser)
@@ -45,13 +52,25 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
             next(e)
         }
     }
-    else {
+    else {        
         next(new UserInputError)
+    }
+}) 
+
+userRouter.use(authenticationMiddleware) 
+
+//Find All Users 
+userRouter.get('/', authorizationMiddleware(['Admin']), async (req:Request, res:Response, next:NextFunction) => { 
+    try {
+        let allUsers = await getAllUsers()
+        res.json(allUsers)
+    } catch (e) {
+        next(e)
     }
 })
 
-//Find Users By Id 
-userRouter.get('/:id', authorizationMiddleware(['Finance Manager', 'Current']), async (req:Request, res:Response, next:NextFunction) => {
+//Find Users By Id ***Admin still cant search for themself
+userRouter.get('/:id', authorizationMiddleware(['Admin','Current']), async (req:Request, res:Response, next:NextFunction) => {
     let {id} = req.params
     if(isNaN(+id)) {
         res.status(400).send('Id Needs to be a Number')
@@ -74,6 +93,12 @@ userRouter.patch('/', authorizationMiddleware(['Admin']), async (req:Request, re
         firstName,
         lastName,
         email,
+        city,
+        state,
+        country,
+        dogName,
+        dogSex,
+        breed,
         role } = req.body
     if(!userId) { //update request must contain a userId
         res.status(400).send('User Updates Require UserId and at Least One Other Field')
@@ -89,6 +114,12 @@ userRouter.patch('/', authorizationMiddleware(['Admin']), async (req:Request, re
             firstName,
             lastName,
             email,
+            city,
+            state,
+            country,
+            dogName,
+            dogSex,
+            breed,
             role
         }
         updatedUserInfo.username = username || undefined
@@ -96,7 +127,12 @@ userRouter.patch('/', authorizationMiddleware(['Admin']), async (req:Request, re
         updatedUserInfo.firstName = firstName || undefined
         updatedUserInfo.lastName = lastName || undefined
         updatedUserInfo.email = email || undefined
-        updatedUserInfo.role = role || undefined
+        updatedUserInfo.city = city || undefined
+        updatedUserInfo.state = state || undefined
+        updatedUserInfo.dogName = dogName || undefined
+        updatedUserInfo.dogSex = dogSex || undefined
+        updatedUserInfo.breed = breed || undefined
+        //updatedUserInfo.role = role || undefined
         try {
             let result = await updateUserInfo(updatedUserInfo)
             res.json(result)
