@@ -154,20 +154,25 @@ left join puppy_pals_site.countries c2
 order by u.user_id;
 
 
---create new city & select ID
-insert into puppy_pals_site.cities ("city") values ($1);
-select c."city_id" from puppy_pals_site.cities c where c."city" = $2;
---find sex_id from dog_sex
-select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = $1;
---create new breed & select ID
-insert into puppy_pals_site.cities ("breed") values ($1);
-select db."breed_id" from puppy_pals_site.dog_breeds db r where db."breed" = $1;
---find state_id from state
-select s."state_id" from puppy_pals_site.states s where s."state" = $1;
-
 --Create New User
+select c."city_id" from puppy_pals_site.cities c where c."city" = $1; -- check if city exists
+insert into puppy_pals_site.cities  ("city") values ($1) returning "city_id"; -- if not, insert it and return city_id
+select s."state_id" from puppy_pals_site.states s where "state" = $1; -- select state_id from table
+select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = $1; -- select sex_id from table
+select db."breed_id" from puppy_pals_site.dog_breeds db where db."breed" = $1; -- check if breed exists
+insert into puppy_pals_site.dog_breeds ("breed") values ($1) returning "breed_id"; -- if not, insert it and return breed_id
 insert into puppy_pals_site.users ("username", "password", "first_name", "last_name", "email", "city", "state", "country", "dog_name", "dog_sex", "breed", "role")
-	values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning "user_id";
+	values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning "user_id"; 
+		-- Include: [username, password, firstName, lastName, email, cityId, stateId, countryId, dogName, sexId, breedId, roleId]
+
+select c."city_id" from puppy_pals_site.cities c where c."city" = 'Upland'; -- check if city exists
+insert into puppy_pals_site.cities  ("city") values ('Upland') returning "city_id"; -- if not, insert it and return city_id
+select s."state_id" from puppy_pals_site.states s where "state" = 'California'; -- select state_id from table
+select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = 'Female'; -- select sex_id from table
+select db."breed_id" from puppy_pals_site.dog_breeds db where db."breed" = 'Beagle'; -- check if breed exists
+insert into puppy_pals_site.dog_breeds ("breed") values ('Beagle') returning "breed_id"; -- if not, insert it and return breed_id
+insert into puppy_pals_site.users ("username", "password", "first_name", "last_name", "email", "city", "state", "country", "dog_name", "dog_sex", "breed", "role")
+	values('elifox', 'password', 'Eli', 'Ward', 'eli@mail.com', 24, 5, 1, 'Lola', 1, 3, 2) returning "user_id";
 
 --Find User By Id
 select u."user_id", 

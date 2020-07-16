@@ -8,31 +8,42 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import {Link} from 'react-router-dom'
+import { FormControlLabel, FormGroup, Switch } from '@material-ui/core';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
-//this is an example of Jss - a more js way of doing css
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        menuButton: {
-            marginRight: theme.spacing(2),
-        },
-        title: {
-            flexGrow: 1,
-        },
-    }),
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    toolbar: {
+        minHeight: 128,
+        alignItems: 'flex-start',
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+  }),
 );
 
 //this is the skeleton
 export const NavBarComponent: FunctionComponent<any> = (props) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [auth, setAuth] = React.useState(true);
+    const open = Boolean(anchorEl);
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAuth(event.target.checked);
+    };
+    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -51,7 +62,58 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
         menuItems.push(<MenuItem onClick={handleClose}><Link to='/users'>All Users</Link></MenuItem>)
     }
 
+    return (
+        <div className={classes.root} >
+          <FormGroup>
+            <FormControlLabel
+              control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
+              label={auth ? 'Logout' : 'Login'}
+            />
+          </FormGroup>
 
+          <AppBar position="static" >
+            <Toolbar className={classes.toolbar} >
+              <IconButton  edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" className={classes.title} >
+                Puppy Pals
+              </Typography>
+              {auth && (
+                <div>
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                  > 
+                    {menuItems}
+                  </Menu>
+                </div>
+              )}
+            </Toolbar>
+          </AppBar>
+        </div>
+    );
+    /*
     return (
         <nav>
             <AppBar position="static">
@@ -72,5 +134,5 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
                 </Toolbar>
             </AppBar>
         </nav>
-    )
+    ) */
 }

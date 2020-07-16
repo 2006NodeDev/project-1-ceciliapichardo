@@ -52,71 +52,60 @@ export async function getAllUsers(): Promise<User[]> {
     }
 }
 
-//Create New Users ***not working
+//Create New Users
 export async function saveAUser(newUser: User): Promise<User> {
     let client: PoolClient
     try {
         client = await connectionPool.connect()
         await client.query('BEGIN;')
-        /*let roleId = await client.query(`select r."role_id" 
-                                        from ers.roles r 
-                                        where r."role" = $1`,
-            [newUser.role])*/
-        //let roleId = 2
-        /*if (roleId.rowCount === 0) {
-            throw new Error('Role Not Found')
-        }
 
-        roleId = roleId.rows[0].role_id */
-        //if(!roleId) {
-        //    throw new Error('Role Not Found')
-        //}
-            //***not working
-        let cityId = await client.query(`select c."city_id" from puppy_pals_site.cities c where c."city" = $1;`, [newUser.city])
-        if (cityId.rowCount === 0) {
-            //throw new Error('City Not Found')
-            console.log(newUser.city);
-            await client.query(`insert into puppy_pals_site.cities ("city") values ($1);`, [newUser.city])
-            //console.log(city);
+        let city = await client.query(`select c."city_id" from puppy_pals_site.cities c where c."city" = $1;`, [newUser.city]) //check if city exists
+        let cityId = city.rows[0].city_id
+        //console.log(cityId);
+        
+        if (city.rowCount === 0) {
+
+            city = await client.query(`insert into puppy_pals_site.cities  ("city") values ($1) returning "city_id";`, [newUser.city]) //if not, insert it and return city_id
             
-            //cityId = city.rows[0].city_id
-            let selectId = await client.query(`select c."city_id" from puppy_pals_site.cities c where c."city" = $1;`, [newUser.city])
-            //console.log(city);
-            //cityId = await client.query(`select c."city_id" from puppy_pals_site.cities c where c."city" = $1;`, [city])
+            cityId = city.rows[0].city_id
+            //console.log(cityId);
             
-            cityId = selectId.rows[0].city_id;
-            console.log(cityId);
             if(cityId.rowCount === 0) {
                 throw new Error('City Not Found')
             }
         }
-        let stateId = await client.query(`select s."state_id" from puppy_pals_site.states s where s."state" = $1;`, [newUser.state])
+        let state = await client.query(`select s."state_id" from puppy_pals_site.states s where "state" = $1;`, [newUser.state]) //select state_id from table
+        let stateId = state.rows[0].state_id
+        //console.log(stateId);
+        
         if (stateId.rowCount === 0) {
             throw new Error('State Not Found')
         }
-        let dogSexId = await client.query(`select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = $1;`, [newUser.dogSex])
-        if (dogSexId.rowCount === 0) {
+        let dogSex = await client.query(`select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = $1;`, [newUser.dogSex]) //select sex_id from table
+        let dogSexId = dogSex.rows[0].sex_id
+        //console.log(dogSexId);
+        
+        if (dogSexId === 0) {
             throw new Error('Sex Not Found')
         }
             //***not working
-        let breedId = await client.query(`select db."breed_id" from puppy_pals_site.dog_breeds db r where db."breed" = $1;`, [newUser.breed])
-        if (breedId.rowCount === 0) {
-            await client.query(`insert into puppy_pals_site.cities ("breed") values ($1);`, [newUser.breed])
+        let breed = await client.query(`select db."breed_id" from puppy_pals_site.dog_breeds db where db."breed" = $1;`, [newUser.breed]) //check if breed exists
+        let breedId = breed.rows[0].breed_id;
+        //console.log(breedId);
+        
+        if (breed.rowCount === 0) {
+            breed = await client.query(`insert into puppy_pals_site.dog_breeds ("breed") values ($1) returning "breed_id";`, [newUser.breed]) //if not, insert it and return breed_id
 
-            let selectId = await client.query(`select db."breed_id" from puppy_pals_site.dog_breeds db r where db."breed" = $1;`, [newUser.breed])
-
-            breedId = selectId.rows[0].breed_id;
+            breedId = breed.rows[0].breed_id;
+            //console.log(breedId);
 
             if (breedId.rowCount === 0) {
                 throw new Error('Breed Not Found')
             }
-        }
+        }   //Finally create New User
         let results = await client.query(`insert into puppy_pals_site.users ("username", "password", "first_name", "last_name", "email", "city", "state", "country", "dog_name", "dog_sex", "breed", "role")
                                             values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning "user_id";`,
-            [newUser.username, newUser.password,
-            newUser.firstName, newUser.lastName, newUser.email, 
-            cityId, stateId, newUser.country.countryId , newUser.dogName,
-            dogSexId, breedId, newUser.role.roleId])
+            [newUser.username, newUser.password, newUser.firstName, newUser.lastName, newUser.email, cityId, stateId, newUser.country.countryId, newUser.dogName, dogSexId, breedId, newUser.role.roleId])
         newUser.userId = results.rows[0].user_id
         await client.query('COMMIT;')
         return newUser
@@ -238,6 +227,13 @@ export async function getUserById(id: number): Promise<User> {
         client && client.release()
     }
 }
+
+//Get Users By City
+
+//Get Users By State
+
+//Get Users By Breed
+
 
 //Update User Info
 export async function updateUserInfo(updatedUserInfo: User): Promise<User> {

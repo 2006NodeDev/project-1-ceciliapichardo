@@ -7,7 +7,7 @@ import { UserInputError } from '../errors/UserInputError'
 
 export const userRouter = express.Router()
 
-//Create New Users
+//Create New Users *** dao not working
 userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
     console.log(req.body);
     let { username,
@@ -34,15 +34,15 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
             city,
             state,
             country: {
-                countryId: 1,
-                country: 'USA'
+                country: 'USA',
+                countryId: 1
             },
             dogName,
             dogSex,
             breed,
             role: {
-                roleId: 2,
-                role: 'User'
+                role: 'User',
+                roleId: 2
             }
         }
         try {
@@ -69,8 +69,10 @@ userRouter.get('/', authorizationMiddleware(['Admin']), async (req:Request, res:
     }
 })
 
-//Find Users By Id ***Admin still cant search for themself
-userRouter.get('/:id', authorizationMiddleware(['Admin','Current']), async (req:Request, res:Response, next:NextFunction) => {
+//Find Users By Id ***Admin still cant search for themself, 
+    //might be okay for this project since searching for other users is not mandatory 
+    //'Admin',
+userRouter.get('/:id', authorizationMiddleware(['Current']), async (req:Request, res:Response, next:NextFunction) => {
     let {id} = req.params
     if(isNaN(+id)) {
         res.status(400).send('Id Needs to be a Number')
@@ -85,8 +87,16 @@ userRouter.get('/:id', authorizationMiddleware(['Admin','Current']), async (req:
     }
 })
 
+//Get Users By City
+
+//Get Users By State
+
+//Get Users By Breed
+
 //Update User, we assume that Admin will have access to UserId for each user
-userRouter.patch('/', authorizationMiddleware(['Admin']), async (req:Request, res:Response, next:NextFunction) => {
+    //*** have to change this to for only Current users to change their own profiles, maybe with username instead of userId?
+    // 'Admin'
+userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:Request, res:Response, next:NextFunction) => {
     let { userId,
         username,
         password,
