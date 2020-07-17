@@ -15,7 +15,7 @@ app.use(corsFilter) //Filters HTTP requests that aren't allowed by origin
 app.use(sessionMiddleware) //Attaches a session object to the request where each unique connection to the server has a unique session
 app.use('/users', userRouter) //Redirect all requests on /users to user-router
 
-app.get('health', (req:Request, res:Response) => {
+app.get('/health', (req:Request, res:Response) => {
     res.sendStatus(200)
 })
 
