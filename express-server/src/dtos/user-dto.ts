@@ -20,4 +20,5 @@ export class UserDTO {
     breed: string
     role_id: number
     role: string
+    image?: string
 }

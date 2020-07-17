@@ -55,5 +55,6 @@ create table users (
 	"dog_name" text not null,
 	"dog_sex" int references sex_of_dog ("sex_id"), --foreign key to sex_of_dog table
 	"breed" int references dog_breeds ("breed_id"), --foreign key to dog_breeds table
-	"role" int references roles ("role_id") --foreign key to roles table
+	"role" int references roles ("role_id"), --foreign key to roles table
+	"image" text
 );

@@ -19,4 +19,5 @@ export class User {
     dogSex: SexOfDog
     breed: Breed
     role: Role //not null
+    image?: string
 }

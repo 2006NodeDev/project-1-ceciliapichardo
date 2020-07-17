@@ -7,7 +7,7 @@ import { UserInputError } from '../errors/UserInputError'
 
 export const userRouter = express.Router()
 
-//Create New Users *** dao not working
+//Create New Users
 userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
     console.log(req.body);
     let { username,
@@ -17,12 +17,10 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
         email,
         city,
         state,
-        //country,
         dogName,
         dogSex,
-        breed
-        //, role 
-    } = req.body
+        breed,
+        image } = req.body
     if(username && password && firstName && lastName && email && city && state && dogName && dogSex && breed) {
         let newUser: User = {
             userId: 0,
@@ -43,8 +41,10 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
             role: {
                 role: 'User',
                 roleId: 2
-            }
+            },
+            image
         }
+        newUser.image = image || undefined
         try {
             let savedUser = await saveAUser(newUser)
             res.json(savedUser)
@@ -109,7 +109,8 @@ userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:
         dogName,
         dogSex,
         breed,
-        role } = req.body
+        role,
+        image } = req.body
     if(!userId) { //update request must contain a userId
         res.status(400).send('User Updates Require UserId and at Least One Other Field')
     }
@@ -130,7 +131,8 @@ userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:
             dogName,
             dogSex,
             breed,
-            role
+            role,
+            image
         }
         updatedUserInfo.username = username || undefined
         updatedUserInfo.password = password || undefined
@@ -142,6 +144,7 @@ userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:
         updatedUserInfo.dogName = dogName || undefined
         updatedUserInfo.dogSex = dogSex || undefined
         updatedUserInfo.breed = breed || undefined
+        updatedUserInfo.image = image || undefined
         //updatedUserInfo.role = role || undefined
         try {
             let result = await updateUserInfo(updatedUserInfo)
