@@ -6,6 +6,7 @@ import { User } from '../../models/User';
 import { useParams} from 'react-router-dom'
 import { getUserById } from '../../remote/react-server-api/get-user-by-id';
 import { UserDisplayComponent } from '../UserDisplayComponent/UserDisplayComponent';
+import { LoginComponent } from '../LoginComponent/LoginComponent';
 
 
 export const ProfileComponent:FunctionComponent<any> =  (props)=>{
@@ -33,11 +34,12 @@ export const ProfileComponent:FunctionComponent<any> =  (props)=>{
     //especially becasue we rely on the request for the component to work
 
     return (
-        (userProfile)?
+        (userProfile) ?
         <UserDisplayComponent user={userProfile} />
         :
         <div>
             <h3>User Not Found</h3>
+            {/* Redirect to Login <LoginComponent></LoginComponent> */}
         </div>
     )
 }

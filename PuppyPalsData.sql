@@ -74,6 +74,11 @@ insert into cities ("city")
 insert into users ("username", "password", "first_name", "last_name", "email", "city", "state", "country", "dog_name", "dog_sex", "breed", "role", "image")
 	values ('cecilia', 'password', 'Cecilia', 'Pichardo', 'ceciliapichardo@gmail.com', 1, 5, 1, 'Chiquis', 1, 1, 1, '/Users/cecilia/Desktop/BelfastTrip.jpg'),
 			('maddie', 'password', 'Maddie', 'Winslow', 'maddie@gmail.com', 2, 5, 1, 'Kobe', 2, 2, 2, '');
+
+-- New Users
+insert into users ("username", "password", "first_name", "last_name", "email", "city", "state", "dog_name", "breed", "role", "image")
+	values ('ceci', 'pass', 'Cecilia', 'Pichardo', 'ceciliapichardo@gmail.com', 'Rialto', 'California', 'Nala', 'Cane Corse', 1, '/Users/cecilia/Desktop/BelfastTrip.jpg'),
+			('maddie', 'password', 'Maddie', 'Winslow', 'maddie@gmail.com', 'Rancho Cucamonga', 'California', 'Kobe', 'Golden Retriever', 2, null);
 		
 select * from roles r;
 select * from dog_breeds db;
@@ -82,6 +87,25 @@ select * from countries c;
 select * from states s2;
 select * from cities c;
 select * from users u;
+
+--Login 2
+select u."user_id", 
+	u."username", 
+	u."password", 
+	u."first_name", 
+	u."last_name", 
+	u."email",
+	u."city",
+	u."state",
+	u."dog_name",
+	u."breed",
+	r."role_id", 
+	r."role",
+	u."image" from puppy_pals_site.users u
+left join puppy_pals_site.roles r 
+	on u."role" = r."role_id"
+where u."username" = $1
+	and u."password" = $2;
 
 --Login
 select u."user_id", 
@@ -119,6 +143,23 @@ left join puppy_pals_site.countries c2
 where u."username" = $1 
 	and u."password" = $2;
 
+--New Find All Users
+select u."user_id", 
+	u."username", 
+	u."password", 
+	u."first_name", 
+	u."last_name", 
+	u."email",
+	u."city",
+	u."state",
+	u."dog_name",
+	u."breed",
+	r."role_id", 
+	r."role",
+	u."image" from puppy_pals_site.users u
+left join puppy_pals_site.roles r 
+	on u."role" = r."role_id"
+order by u.user_id;
 
 --Find All Users
 select u."user_id", 
@@ -176,6 +217,24 @@ insert into puppy_pals_site.dog_breeds ("breed") values ('Beagle') returning "br
 insert into puppy_pals_site.users ("username", "password", "first_name", "last_name", "email", "city", "state", "country", "dog_name", "dog_sex", "breed", "role", "image")
 	values('elifox', 'password', 'Eli', 'Ward', 'eli@mail.com', 24, 5, 1, 'Lola', 1, 3, 2, '') returning "user_id";
 
+--New Find User By Id
+select u."user_id", 
+	u."username", 
+	u."password", 
+	u."first_name", 
+	u."last_name", 
+	u."email",
+	u."city",
+	u."state",
+	u."dog_name",
+	u."breed",
+	r."role_id", 
+	r."role",
+	u."image" from puppy_pals_site.users u
+left join puppy_pals_site.roles r 
+	on u."role" = r."role_id"
+	where u."user_id" = $1;
+
 --Find User By Id
 select u."user_id", 
 	u."username", 
@@ -220,16 +279,16 @@ update puppy_pals_site.users set "email" = $1 where "user_id" = $2;
 update puppy_pals_site.users set "dog_name" = $1 where "user_id" = $2;
 update puppy_pals_site.users set "image" = $1 where "user_id" = $2;
 	-- city
-	select c."city_id" from puppy_pals_site.cities c where c."city" = $1;
+	--select c."city_id" from puppy_pals_site.cities c where c."city" = $1;
 	update puppy_pals_site.users set "city" = $1 where "user_id" = $2;
 	-- state
-	select s."state_id" from puppy_pals_site.states s where s."state" = $1;
+	--select s."state_id" from puppy_pals_site.states s where s."state" = $1;
 	update puppy_pals_site.users set "state" = $1 where "user_id" = $2;
 	-- dog sex
-	select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = $1;
+	--select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = $1;
 	update puppy_pals_site.users set "dog_sex" = $1 where "user_id" = $2;
 	-- breed
-	select db."breed_id" from puppy_pals_site.dog_breeds db where db."breed" = $1;
+	--select db."breed_id" from puppy_pals_site.dog_breeds db where db."breed" = $1;
 	update puppy_pals_site.users set "breed" = $1 where "user_id" = $2;
 
 		

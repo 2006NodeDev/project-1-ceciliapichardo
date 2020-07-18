@@ -41,6 +41,21 @@ create table cities ( /* list of cities */
 	"city" text
 );
 
+/* New User Info */
+create table users (
+	"user_id" serial primary key,
+	"username" text not null unique,
+	"password" text not null,
+	"first_name" text not null,
+	"last_name" text not null,
+	"email" text not null,
+	"city" text not null,
+	"state" text not null,
+	"dog_name" text not null,
+	"breed" text not null, --foreign key to dog_breeds table
+	"role" int references roles ("role_id"), --foreign key to roles table
+	"image" text
+);
 /* User Info */
 create table users (
 	"user_id" serial primary key,

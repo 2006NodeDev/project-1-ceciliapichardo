@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express'
-import { getAllUsers, getUserById, saveAUser, updateUserInfo } from '../daos/user-dao'
 import { authenticationMiddleware } from '../middleware/authentication-middleware'
 import { authorizationMiddleware } from '../middleware/authorization-middleware'
 import { User } from '../models/User'
 import { UserInputError } from '../errors/UserInputError'
+import { saveNewUserService, getUserByIdService, getAllUsersService, updateUserService } from '../services/user-service'
 
 export const userRouter = express.Router()
 
@@ -18,10 +18,10 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
         city,
         state,
         dogName,
-        dogSex,
+        //dogSex,
         breed,
         image } = req.body
-    if(username && password && firstName && lastName && email && city && state && dogName && dogSex && breed) {
+    if(username && password && firstName && lastName && email && city && state && dogName /*&& dogSex*/ && breed) {
         let newUser: User = {
             userId: 0,
             username,
@@ -31,12 +31,12 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
             email,
             city,
             state,
-            country: {
-                country: 'USA',
-                countryId: 1
-            },
+            //country: {
+            //    country: 'USA',
+            //    countryId: 1
+            //},
             dogName,
-            dogSex,
+            //dogSex,
             breed,
             role: {
                 role: 'User',
@@ -46,7 +46,7 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
         }
         newUser.image = image || undefined
         try {
-            let savedUser = await saveAUser(newUser)
+            let savedUser = await saveNewUserService(newUser)
             res.json(savedUser)
         } catch (e) {
             next(e)
@@ -62,7 +62,7 @@ userRouter.use(authenticationMiddleware)
 //Find All Users 
 userRouter.get('/', authorizationMiddleware(['Admin']), async (req:Request, res:Response, next:NextFunction) => { 
     try {
-        let allUsers = await getAllUsers()
+        let allUsers = await getAllUsersService()
         res.json(allUsers)
     } catch (e) {
         next(e)
@@ -79,7 +79,7 @@ userRouter.get('/:id', authorizationMiddleware(['Current']), async (req:Request,
     }
     else { 
         try {
-            let userById = await getUserById(+id)
+            let userById = await getUserByIdService(+id)
             res.json(userById)
         } catch (e) {
             next(e)
@@ -105,9 +105,9 @@ userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:
         email,
         city,
         state,
-        country,
+        //country,
         dogName,
-        dogSex,
+        //dogSex,
         breed,
         role,
         image } = req.body
@@ -127,9 +127,9 @@ userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:
             email,
             city,
             state,
-            country,
+            //country,
             dogName,
-            dogSex,
+            //dogSex,
             breed,
             role,
             image
@@ -142,12 +142,12 @@ userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:
         updatedUserInfo.city = city || undefined
         updatedUserInfo.state = state || undefined
         updatedUserInfo.dogName = dogName || undefined
-        updatedUserInfo.dogSex = dogSex || undefined
+        //updatedUserInfo.dogSex = dogSex || undefined
         updatedUserInfo.breed = breed || undefined
         updatedUserInfo.image = image || undefined
         //updatedUserInfo.role = role || undefined
         try {
-            let result = await updateUserInfo(updatedUserInfo)
+            let result = await updateUserService(updatedUserInfo)
             res.json(result)
         } catch (e) {
             next(e)

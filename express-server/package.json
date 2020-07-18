@@ -6,11 +6,12 @@
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts",
     "test": "jest",
-    "test:coverage":"jest --coverage"
+    "test:coverage": "jest --coverage"
   },
   "author": "cecilia pichardo",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^5.1.2",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "pg": "^8.3.0"

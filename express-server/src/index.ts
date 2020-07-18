@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import { sessionMiddleware } from './middleware/session-middleware'
 import { userRouter } from './routers/user-router'
-import { loginWithUsernameAndPassword } from './daos/user-dao'
+import { loginWithUsernameAndPassword } from './daos/SQL/user-dao'
 import { AuthenticationFailureError } from './errors/AuthenticationFailureError'
 import { loggingMiddleware } from './middleware/logging-middleware'
 import { corsFilter } from './middleware/cors-filter'

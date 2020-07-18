@@ -12,12 +12,15 @@ export interface User {
     firstName: string
     lastName: string
     email: string
-    city: City
-    state: State
-    country: Country
+    city: string
+    state: string
     dogName: string
-    dogSex: SexOfDog
-    breed: Breed
+    breed: string
+    //city: City
+    //state: State
+    //country: Country
+    //dogSex: SexOfDog
+    //breed: Breed
     role: Role
     image?: string
 }

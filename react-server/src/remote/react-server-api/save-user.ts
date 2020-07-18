@@ -1,7 +1,6 @@
 import { reactClient } from "."
 import { User } from "../../models/User"
 
-
 export const reactSaveUser = async (newUser:User) => {
     
     try {

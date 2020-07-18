@@ -15,15 +15,20 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      //minHeight: 0,
+      maxHeight: 3,
+      backgroundColor: '#ff5722' //top of toolbar
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(2)
     },
     toolbar: {
-        minHeight: 128,
+        minHeight: 10, //height of toolbar
         alignItems: 'flex-start',
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
+        paddingTop: 15,//theme.spacing(1),
+        //paddingBottom: 0,//theme.spacing(1),
+        backgroundColor: '#fbe9e7',
+        color: 'black',
     },
     title: {
       flexGrow: 1,
@@ -50,12 +55,16 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
     //we can programmatically build the menu items
     let menuItems = []
     //always have the login item
-    menuItems.push(<MenuItem onClick={handleClose}><Link to='/login'>Login</Link></MenuItem>)
+    menuItems.push(
+      <MenuItem onClick={handleClose}><Link to='/login'>Login</Link></MenuItem>,
+      <MenuItem onClick={handleClose}><Link to='/new-user'>Create Account</Link></MenuItem>  
+    )
     if(props.user){
         //if they are logged in, add the other items
         menuItems.push(
         <MenuItem onClick={handleClose}><Link to='/title'>Title</Link></MenuItem>,
-        <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user)?props.user.userId : '0' }`}>My Profile</Link></MenuItem>
+        <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user)?props.user.userId : '0' }`}>My Profile</Link></MenuItem>,
+        <MenuItem onClick={handleClose}><Link to='/edit-user'>Edit Profile</Link></MenuItem>
         )
     }
     if(props.user && props.user.role.role === 'Admin'){
@@ -76,7 +85,7 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
               <IconButton  edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6" className={classes.title} >
+              <Typography align="left" variant="h6" className={classes.title} >
                 Puppy Pals
               </Typography>
               {auth && (

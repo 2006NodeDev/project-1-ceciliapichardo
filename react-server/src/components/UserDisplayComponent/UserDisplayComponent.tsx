@@ -36,10 +36,25 @@ export const UserDisplayComponent:FunctionComponent<IUserDisplayProps> = (props)
                    Username : {props.user.username}
                 </Typography>
                 <Typography variant='body1'>
+                   First Name : {props.user.firstName}
+                </Typography>
+                <Typography variant='body1'>
+                   Last Name : {props.user.lastName}
+                </Typography>
+                <Typography variant='body1'>
                    Email : {props.user.email}
                 </Typography>
                 <Typography variant='body1'>
-                   Role : {props.user.role.role}
+                   PuppyPal : {props.user.dogName}
+                </Typography>
+                <Typography variant='body1'>
+                   Breed : {props.user.breed}
+                </Typography>
+                <Typography variant='body1'>
+                   Location : {props.user.city}, {props.user.state}
+                </Typography>
+                <Typography variant='body1'>
+                   Profile Pic : {props.user.image}
                 </Typography>
                 <Button variant='contained' color='inherit'>Edit</Button>
             </Paper>
