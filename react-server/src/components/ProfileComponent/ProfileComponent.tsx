@@ -9,7 +9,7 @@ import { UserDisplayComponent } from '../UserDisplayComponent/UserDisplayCompone
 import { LoginComponent } from '../LoginComponent/LoginComponent';
 
 
-export const ProfileComponent:FunctionComponent<any> =  (props)=>{
+export const ProfileComponent:FunctionComponent<any> =  (props) => {
     let [userProfile, changeUserProfile] = useState<null | User>(null)
     let {userId} = useParams()//come from match.params which is provided by router
 

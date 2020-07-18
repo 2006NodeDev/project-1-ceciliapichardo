@@ -77,7 +77,7 @@ insert into users ("username", "password", "first_name", "last_name", "email", "
 
 -- New Users
 insert into users ("username", "password", "first_name", "last_name", "email", "city", "state", "dog_name", "breed", "role", "image")
-	values ('ceci', 'pass', 'Cecilia', 'Pichardo', 'ceciliapichardo@gmail.com', 'Rialto', 'California', 'Nala', 'Cane Corse', 1, '/Users/cecilia/Desktop/BelfastTrip.jpg'),
+	values ('ceci', 'pass', 'Cecilia', 'Pichardo', 'ceciliapichardo@gmail.com', 'Rialto', 'California', 'Nala', 'Cane Corso', 1, null),
 			('maddie', 'password', 'Maddie', 'Winslow', 'maddie@gmail.com', 'Rancho Cucamonga', 'California', 'Kobe', 'Golden Retriever', 2, null);
 		
 select * from roles r;

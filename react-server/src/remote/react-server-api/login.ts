@@ -12,7 +12,7 @@ export const reactLogin = async (username:string, password:string) => {
         return response.data
     } catch (e) {
         console.log(e);
-        
+        throw(e)
     }
     
 }

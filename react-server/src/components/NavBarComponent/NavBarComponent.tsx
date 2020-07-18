@@ -63,8 +63,8 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
         //if they are logged in, add the other items
         menuItems.push(
         <MenuItem onClick={handleClose}><Link to='/title'>Title</Link></MenuItem>,
-        <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user)?props.user.userId : '0' }`}>My Profile</Link></MenuItem>,
-        <MenuItem onClick={handleClose}><Link to='/edit-user'>Edit Profile</Link></MenuItem>
+        <MenuItem onClick={handleClose}><Link to={`/profile/${ (props.user) ? props.user.userId : '0' }`}>My Profile</Link></MenuItem>,
+        <MenuItem onClick={handleClose}><Link to={`/edit/${ (props.user) ? props.user.userId : '0' }`}>Edit Profile</Link></MenuItem>
         )
     }
     if(props.user && props.user.role.role === 'Admin'){

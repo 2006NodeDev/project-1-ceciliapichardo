@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express'
 import { sessionMiddleware } from './middleware/session-middleware'
 import { userRouter } from './routers/user-router'
-import { loginWithUsernameAndPassword } from './daos/SQL/user-dao'
 import { AuthenticationFailureError } from './errors/AuthenticationFailureError'
 import { loggingMiddleware } from './middleware/logging-middleware'
 import { corsFilter } from './middleware/cors-filter'
+import { loginWithUsernameAndPasswordService } from './services/user-service'
 
 /* IDK my theme yet */
 
@@ -29,7 +29,7 @@ app.post('/login', async (req:Request, res:Response, next:NextFunction) => {
     }
     else { 
         try {
-            let user = await loginWithUsernameAndPassword(username, password)
+            let user = await loginWithUsernameAndPasswordService(username, password)
             req.session.user = user
             res.json(user)
         } catch (e) {

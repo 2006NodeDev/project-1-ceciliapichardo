@@ -8,7 +8,7 @@ import { saveNewUserService, getUserByIdService, getAllUsersService, updateUserS
 export const userRouter = express.Router()
 
 //Create New Users
-userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
+userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     console.log(req.body);
     let { username,
         password,
@@ -21,7 +21,7 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
         //dogSex,
         breed,
         image } = req.body
-    if(username && password && firstName && lastName && email && city && state && dogName /*&& dogSex*/ && breed) {
+    if (username && password && firstName && lastName && email && city && state && dogName /*&& dogSex*/ && breed) {
         let newUser: User = {
             userId: 0,
             username,
@@ -52,51 +52,15 @@ userRouter.post('/', async (req:Request, res:Response, next:NextFunction) => {
             next(e)
         }
     }
-    else {        
+    else {
         next(new UserInputError)
     }
-}) 
-
-userRouter.use(authenticationMiddleware) 
-
-//Find All Users 
-userRouter.get('/', authorizationMiddleware(['Admin']), async (req:Request, res:Response, next:NextFunction) => { 
-    try {
-        let allUsers = await getAllUsersService()
-        res.json(allUsers)
-    } catch (e) {
-        next(e)
-    }
 })
-
-//Find Users By Id ***Admin still cant search for themself, 
-    //might be okay for this project since searching for other users is not mandatory 
-    //'Admin',
-userRouter.get('/:id', authorizationMiddleware(['Current']), async (req:Request, res:Response, next:NextFunction) => {
-    let {id} = req.params
-    if(isNaN(+id)) {
-        res.status(400).send('Id Needs to be a Number')
-    }
-    else { 
-        try {
-            let userById = await getUserByIdService(+id)
-            res.json(userById)
-        } catch (e) {
-            next(e)
-        }
-    }
-})
-
-//Get Users By City
-
-//Get Users By State
-
-//Get Users By Breed
 
 //Update User, we assume that Admin will have access to UserId for each user
-    //*** have to change this to for only Current users to change their own profiles, maybe with username instead of userId?
-    // 'Admin'
-userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:Request, res:Response, next:NextFunction) => {
+//*** have to change this to for only Current users to change their own profiles, maybe with username instead of userId?
+// 'Admin'
+userRouter.patch('/', async (req: Request, res: Response, next: NextFunction) => {
     let { userId,
         username,
         password,
@@ -111,14 +75,14 @@ userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:
         breed,
         role,
         image } = req.body
-    if(!userId) { //update request must contain a userId
+    if (!userId) { //update request must contain a userId
         res.status(400).send('User Updates Require UserId and at Least One Other Field')
     }
-    else if(isNaN(+userId)) { //check if userId is valid
+    else if (isNaN(+userId)) { //check if userId is valid
         res.status(400).send('Id Needs to be a Number')
     }
     else {
-        let updatedUserInfo:User = {
+        let updatedUserInfo: User = {
             userId,
             username,
             password,
@@ -153,4 +117,41 @@ userRouter.patch('/', authorizationMiddleware(['Admin', 'Current']), async (req:
             next(e)
         }
     }
-}) 
+})
+
+userRouter.use(authenticationMiddleware)
+
+//Find All Users 
+userRouter.get('/', authorizationMiddleware(['Admin']), async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        let allUsers = await getAllUsersService()
+        res.json(allUsers)
+    } catch (e) {
+        next(e)
+    }
+})
+
+//Find Users By Id ***Admin still cant search for themself, 
+//might be okay for this project since searching for other users is not mandatory 
+//'Admin',
+userRouter.get('/:id', authorizationMiddleware(['Current']), async (req: Request, res: Response, next: NextFunction) => {
+    let { id } = req.params
+    if (isNaN(+id)) {
+        res.status(400).send('Id Needs to be a Number')
+    }
+    else {
+        try {
+            let userById = await getUserByIdService(+id)
+            res.json(userById)
+        } catch (e) {
+            next(e)
+        }
+    }
+})
+
+//Get Users By City
+
+//Get Users By State
+
+//Get Users By Breed
+

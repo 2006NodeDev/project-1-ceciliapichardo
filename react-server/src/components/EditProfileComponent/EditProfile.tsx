@@ -9,7 +9,7 @@ interface EditUserProps {
 }
 //export const EditProfile: FunctionComponent<EditUserProps> = (props) => {
 export const EditProfile: FunctionComponent<any> = (props) => {
-    let [userProfile, changeUserProfile] = useState<null | User>(null)
+    //let [userProfile, changeUserProfile] = useState<null | User>(null)
     const {userId} = useParams()//come from match.params which is provided by router
     let [username, changeUsername] = useState('')
     let [password, changePassword] = useState('')
@@ -28,7 +28,7 @@ export const EditProfile: FunctionComponent<any> = (props) => {
             changeUsername(e.currentTarget.value)
         }
         else {
-            changeUsername(props.user.username)
+            changeUsername(e.currentTarget.username)
         }
     }
     const updatePassword = (e: any) => {
@@ -118,7 +118,7 @@ export const EditProfile: FunctionComponent<any> = (props) => {
         e.preventDefault()
         
         let updatedUser: User = { //*** not sure why this id isnt working */
-            userId: props.user.userId, //userProfile.userId,
+            userId: userId, //props.user.userId, //userProfile.userId,
             username,
             password,
             firstName,
@@ -132,10 +132,13 @@ export const EditProfile: FunctionComponent<any> = (props) => {
             image
         }
         try { 
+
+            //let res = await editUser(updatedUser)
             await editUser(updatedUser)
             console.log(updatedUser);
-            
-        //props.history.push(`/profile/${userId}`)
+            //props.history.push(`/profile/${res.userId}`)
+            props.history.push(`/profile/${userId}`)
+
         } catch (e) {
             console.log(e);
         }
@@ -151,15 +154,15 @@ export const EditProfile: FunctionComponent<any> = (props) => {
                     justify="flex-start"
                     alignItems="center"
                 >
-                    <TextField id="standard-basic" label="Username" value={username} onChange={updateUsername} />
-                    <TextField id="standard-basic" type='password' label="Password" value={password} onChange={updatePassword} />
-                    <TextField id="standard-basic" label="First Name" value={firstName} onChange={updateFirstName} />
-                    <TextField id="standard-basic" label="Last Name" value={lastName} onChange={updateLastName} />
-                    <TextField id="standard-basic" type='email' label="Email" value={email} onChange={updateEmail} />
-                    <TextField id="standard-basic" label="City" value={city} onChange={updateCity} />
-                    <TextField id="standard-basic" label="State" value={state} onChange={updateState} />
-                    <TextField id="standard-basic" label="Dog Name" value={dogName} onChange={updateDogName} />
-                    <TextField id="standard-basic" label="Breed" value={breed} onChange={updateBreed} />
+                    <TextField required id="standard-basic" label="Username" value={username} onChange={updateUsername} />
+                    <TextField id="standard-basic" type='password' label="Update Password" value={password} onChange={updatePassword} />
+                    <TextField id="standard-basic" label="Update First Name" value={firstName} onChange={updateFirstName} />
+                    <TextField id="standard-basic" label="Update Last Name" value={lastName} onChange={updateLastName} />
+                    <TextField id="standard-basic" type='email' label="Update Email" value={email} onChange={updateEmail} />
+                    <TextField id="standard-basic" label="Update City" value={city} onChange={updateCity} />
+                    <TextField id="standard-basic" label="Update State" value={state} onChange={updateState} />
+                    <TextField id="standard-basic" label="Update Pet Name" value={dogName} onChange={updateDogName} />
+                    <TextField id="standard-basic" label="Update Pet Breed" value={breed} onChange={updateBreed} />
                 </Grid>
                 <br /><br />
                 <label htmlFor='file'>Profile Pic</label>
