@@ -11,22 +11,27 @@ import { NewUserComponent } from './components/NewUserComponent/NewUserComponent
 import {ToastContainer} from 'react-toastify';
 import { makeStyles } from '@material-ui/core';
 import { EditProfile } from './components/EditProfileComponent/EditProfile';
+import { findByText } from '@testing-library/react';
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     alignItems: 'center',
-//     justifyContent: 'center'
-//   }
-// }))
+const useStyles = makeStyles((theme) => ({
+  root: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: "column",
+    minHeight: '100vh',
+    textAlign: 'center',
+  }
+}))
 
 function App() {
   const [currentUser, changeCurrentUser] = useState<null | User>(null)
-  //const classes = useStyles()
+  const classes = useStyles()
   return (
-    <div className="App" style={ {border: '3px solid #fbe9e7'} }>
+    <div className={classes.root} style={ {border: '3px solid #ff5722' } }>
       <Router>
-        <NavBarComponent user={currentUser}/>
-        <Route path='title' render={(props) => ( <TitleComponent title={'First Title'} size='large'/> )} />
+        <header><NavBarComponent user={currentUser}/></header>
+        {/* <NavBarComponent user={currentUser}/> */}
+        {/* <Route path='title' render={(props) => ( <TitleComponent title={'First Title'} size='large'/> )} /> */}
         <Route path='/login' render={(props) => ( <LoginComponent changeCurrentUser={changeCurrentUser} {...props} /> )} />
         <Route path='/profile/:userId' component={ProfileComponent} />
         <Route path='/edit/:userId' component={EditProfile} />

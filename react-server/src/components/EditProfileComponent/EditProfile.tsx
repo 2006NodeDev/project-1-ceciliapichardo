@@ -1,14 +1,35 @@
 import React, { FunctionComponent, useState, SyntheticEvent } from 'react';
 import { User } from '../../models/User';
-import { Grid, TextField, Button } from '@material-ui/core';
+import { Grid, TextField, Button, createStyles, Theme, makeStyles, IconButton } from '@material-ui/core';
 import { useParams } from 'react-router';
 import { editUser } from '../../remote/react-server-api/edit-user';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
-interface EditUserProps {
-    user: User | null
-}
+// interface EditUserProps {
+//     user: User | null
+// }
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    margin: {
+      margin: theme.spacing(1),
+    },
+    button: {
+        color: '#ff5722',
+        borderColor: '#ff5722'
+    },
+    input: {
+        display: 'none',
+        width: '10',
+        height: '25'
+    },
+  }),
+);
+
 //export const EditProfile: FunctionComponent<EditUserProps> = (props) => {
 export const EditProfile: FunctionComponent<any> = (props) => {
+    const classes = useStyles();
+
     //let [userProfile, changeUserProfile] = useState<null | User>(null)
     const {userId} = useParams()//come from match.params which is provided by router
     let [username, changeUsername] = useState('')
@@ -154,6 +175,18 @@ export const EditProfile: FunctionComponent<any> = (props) => {
                     justify="flex-start"
                     alignItems="center"
                 >
+                    <input accept="image/*" className={classes.input} id="icon-button-file" type="file" onChange={updateImage} />
+                    <label htmlFor='icon-button-file'>
+                        <IconButton
+                            color="default"
+                            aria-label="upload picture"
+                            component="span"
+                        >
+                            <PhotoCamera />
+                        </IconButton>
+                    </label>
+                    <img src={image || ''} width={5} height={15} />
+                    
                     <TextField required id="standard-basic" label="Username" value={username} onChange={updateUsername} />
                     <TextField id="standard-basic" type='password' label="Update Password" value={password} onChange={updatePassword} />
                     <TextField id="standard-basic" label="Update First Name" value={firstName} onChange={updateFirstName} />
@@ -165,11 +198,8 @@ export const EditProfile: FunctionComponent<any> = (props) => {
                     <TextField id="standard-basic" label="Update Pet Breed" value={breed} onChange={updateBreed} />
                 </Grid>
                 <br /><br />
-                <label htmlFor='file'>Profile Pic</label>
-                <input type='file' name='file' accept='image/*' onChange={updateImage} />
-                <img src={image || ''} alt='' /> <br /> {/****this needs restrictions */}
-                <br /><br />
-                <Button variant="contained" type="submit">Submit</Button>
+                <Button type='submit' variant="outlined" className={classes.button}>Save</Button>
+                {/* <Button variant="contained" type="submit">Submit</Button> */}
             </form>
         </div>
     );

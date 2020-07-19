@@ -1,9 +1,10 @@
 import React, { FunctionComponent, SyntheticEvent, useState } from 'react';
-import { Button, TextField, FormControl, InputLabel, Select, makeStyles, createStyles, Theme, FormHelperText, Grid, Paper } from '@material-ui/core';
+import { Button, TextField, FormControl, InputLabel, Select, makeStyles, createStyles, Theme, FormHelperText, Grid, Paper, IconButton } from '@material-ui/core';
 import { reactSaveUser } from '../../remote/react-server-api/save-user';
 import { toast } from 'react-toastify';
 import { User } from '../../models/User';
 import classes from '*.module.css';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,6 +22,14 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(2),
             textAlign: 'center',
             color: theme.palette.text.secondary,
+        },
+        button: {
+            //backgroundColor: '#ff5722',
+            color: '#ff5722',
+            borderColor: '#ff5722'
+        },
+        input: {
+            display: 'none',
         },
     }),
 );
@@ -104,7 +113,7 @@ export const NewUserComponent: FunctionComponent<any> = (props) => {
     }
     const submitUser = async (e: SyntheticEvent) => {
         e.preventDefault()
-        
+
         if (password !== confirmPassword) {
             toast.error('Passwords Do Not Match')
         }
@@ -138,25 +147,45 @@ export const NewUserComponent: FunctionComponent<any> = (props) => {
     return (
         <div>
             <form onSubmit={submitUser}>
-                <br/><br/><br/><br/><br/><br/>
+                <br /><br /><br /><br /><br /><br />
                 <Grid
                     container
                     direction="column"
                     justify="flex-start"
                     alignItems="center"
                 >
-                    <TextField id="standard-basic" label="Username" value={username} onChange={updateUsername} />
-                    <TextField id="standard-basic" type='password' label="Password" value={password} onChange={updatePassword} />
-                    <TextField id="standard-basic" type='password' label="Confirm Password" value={confirmPassword} onChange={updateConfirmPassword} />
-                    <TextField id="standard-basic" label="First Name" value={firstName} onChange={updateFirstName} />
-                    <TextField id="standard-basic" label="Last Name" value={lastName} onChange={updateLastName} />
-                    <TextField id="standard-basic" type='email' label="Email" value={email} onChange={updateEmail} />
-                    <TextField id="standard-basic" label="City" value={city} onChange={updateCity} />
-                    <TextField id="standard-basic" label="State" value={state} onChange={updateState} />
-                    <TextField id="standard-basic" label="Dog Name" value={dogName} onChange={updateDogName} />
-                    <TextField id="standard-basic" label="Breed" value={breed} onChange={updateBreed} />
+                    <input accept="image/*" className={classes.input} id="icon-button-file" type="file" onChange={updateImage}/>
+                    <label htmlFor='icon-button-file'>
+                        <IconButton
+                            color="default"
+                            aria-label="upload picture"
+                            component="span"
+                        >
+                            <PhotoCamera />
+                        </IconButton>
+                    </label>
+                    <img src={image || ''} />  {/****this needs restrictions so picture does not fill whole screen*/}
 
-                {/*    <FormControl required className={classes.formControl}>
+                    <TextField required id="standard-basic" label="Username" value={username} onChange={updateUsername} />
+                    <TextField required id="standard-basic" type='password' label="Password" value={password} onChange={updatePassword} />
+                    <TextField required id="standard-basic" type='password' label="Confirm Password" value={confirmPassword} onChange={updateConfirmPassword} />
+                    <TextField required id="standard-basic" label="First Name" value={firstName} onChange={updateFirstName} />
+                    <TextField required id="standard-basic" label="Last Name" value={lastName} onChange={updateLastName} />
+                    <TextField required id="standard-basic" type='email' label="Email" value={email} onChange={updateEmail} />
+                    <TextField required id="standard-basic" label="City" value={city} onChange={updateCity} />
+                    <TextField required id="standard-basic" label="State" value={state} onChange={updateState} />
+                    <TextField required id="standard-basic" label="Pet Name" value={dogName} onChange={updateDogName} />
+                    <TextField required id="standard-basic" label="Breed" value={breed} onChange={updateBreed} />
+
+                </Grid>
+                <br /><br />
+                <Button type='submit' variant="outlined" className={classes.button}>Submit</Button>
+            </form>
+        </div>
+    )
+}
+
+{/*    <FormControl required className={classes.formControl}>
                         <InputLabel htmlFor="state-native-required">State</InputLabel>
                         <Select
                             native
@@ -240,14 +269,3 @@ export const NewUserComponent: FunctionComponent<any> = (props) => {
                         <FormHelperText>Required</FormHelperText>
                     </FormControl>
                     */}
-                </Grid>
-                <br/><br/>
-                <label htmlFor='file'>Profile Pic</label>
-                <input type='file' name='file' accept='image/*' onChange={updateImage} />
-                <img src={image || ''} alt='' /> <br/> {/****this needs restrictions so picture does not fill whole screen*/}
-                <br/><br/>
-                <Button variant="contained" type="submit">Submit</Button>
-            </form>
-        </div>
-    )
-}

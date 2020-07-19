@@ -16,6 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
     margin: {
       margin: theme.spacing(1),
     },
+    button: {
+        color: '#ff5722',
+        borderColor: '#ff5722'
+    },
   }),
 );
 
@@ -59,6 +63,8 @@ export const LoginComponent:FunctionComponent<ILoginProps> = (props) => {
                     required
                     id="input-with-icon-textfield"
                     label="Username"
+                    value={username} 
+                    onChange={updateUsername}
                     InputProps={{
                         startAdornment: (
                         <InputAdornment position="start">
@@ -71,7 +77,10 @@ export const LoginComponent:FunctionComponent<ILoginProps> = (props) => {
                     className={classes.margin}
                     required
                     id="input-with-icon-textfield"
+                    type='password'
                     label="Password"
+                    value={password} 
+                    onChange={updatePassword}
                     InputProps={{
                         startAdornment: (
                         <InputAdornment position="start">
@@ -80,7 +89,7 @@ export const LoginComponent:FunctionComponent<ILoginProps> = (props) => {
                         ),
                     }} 
                 /> <br/> <br/>
-                <Button type='submit' variant="outlined" color="secondary">Login</Button>
+                <Button type='submit' variant="outlined" className={classes.button}>Login</Button>
             </form>
             <br/>
         </div>
