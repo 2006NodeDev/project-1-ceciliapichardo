@@ -3,7 +3,7 @@ import { authenticationMiddleware } from '../middleware/authentication-middlewar
 import { authorizationMiddleware } from '../middleware/authorization-middleware'
 import { User } from '../models/User'
 import { UserInputError } from '../errors/UserInputError'
-import { saveNewUserService, getUserByIdService, getAllUsersService, updateUserService } from '../services/user-service'
+import { saveNewUserService, getUserByIdService, getAllUsersService, updateUserService, getUsersByLocationService } from '../services/user-service'
 
 export const userRouter = express.Router()
 
@@ -119,6 +119,22 @@ userRouter.patch('/', async (req: Request, res: Response, next: NextFunction) =>
     }
 })
 
+//Get Users By City & State
+userRouter.post('/location', async (req:Request, res:Response, next:NextFunction) => {
+    let { city, state } = req.body
+    if (!city || !state) {
+        res.status(400).send('City and State are required')
+    }
+    else {
+        try {
+            let usersByLocation = await getUsersByLocationService(city,state)
+            res.json(usersByLocation)
+        } catch (e) {
+            next(e)
+        }
+    }
+})
+
 userRouter.use(authenticationMiddleware)
 
 //Find All Users 
@@ -149,9 +165,6 @@ userRouter.get('/:id', authorizationMiddleware(['Current']), async (req: Request
     }
 })
 
-//Get Users By City
-
-//Get Users By State
 
 //Get Users By Breed
 

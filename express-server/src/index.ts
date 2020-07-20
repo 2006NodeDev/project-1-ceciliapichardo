@@ -5,9 +5,11 @@ import { AuthenticationFailureError } from './errors/AuthenticationFailureError'
 import { loggingMiddleware } from './middleware/logging-middleware'
 import { corsFilter } from './middleware/cors-filter'
 import { loginWithUsernameAndPasswordService } from './services/user-service'
-
+import { userTopic } from './messaging'
+//import { userTopic } from './messaging/index'
 /* IDK my theme yet */
 
+console.log(userTopic);
 const app = express() //Creates complete express application
 app.use(express.json({limit:'50mb'})) //Matches every HTTP verb, middleware
 app.use(loggingMiddleware) //Logs out request method, ip address making request, and path of request

@@ -291,5 +291,24 @@ update puppy_pals_site.users set "image" = $1 where "user_id" = $2;
 	--select db."breed_id" from puppy_pals_site.dog_breeds db where db."breed" = $1;
 	update puppy_pals_site.users set "breed" = $1 where "user_id" = $2;
 
+--Find users by city
+select * from puppy_pals_site.users u where "city"='Rialto' and "state"= 'California';
+select u."user_id", 
+        u."username", 
+        u."password", 
+        u."first_name", 
+        u."last_name", 
+        u."email",
+        u."city",
+        u."state",
+        u."dog_name",
+        u."breed",
+        r."role_id", 
+        r."role",
+        u."image" from puppy_pals_site.users u
+    left join puppy_pals_site.roles r 
+        on u."role" = r."role_id"
+    where "city"=$1 and "state"= $2
+    order by u.user_id;
 		
 

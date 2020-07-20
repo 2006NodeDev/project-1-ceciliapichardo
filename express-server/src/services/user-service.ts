@@ -1,7 +1,8 @@
-import { loginWithUsernameAndPassword, getAllUsers, getUserById, saveAUser, updateUserInfo } from "../daos/SQL/user-dao"
+import { loginWithUsernameAndPassword, getAllUsers, getUserById, saveAUser, updateUserInfo, getUsersByLocation } from "../daos/SQL/user-dao"
 import { User } from "../models/User"
 import { saveProfilePicture } from "../daos/Cloud-Storage/user-images"
 import { bucketBaseUrl } from "../daos/Cloud-Storage"
+import { customExpressEvents, expressEventEmitter } from "../event-listening"
 //calls the dao
 
 //Login a User
@@ -17,6 +18,11 @@ export async function getAllUsersService(): Promise<User[]> {
 //Find Users by Id
 export async function getUserByIdService(userId: number): Promise<User> {
     return await getUserById(userId)
+}
+
+//Find Users by City & State
+export async function getUsersByLocationService(city:string, state:string): Promise<User[]> {
+    return await getUsersByLocation(city,state)
 }
 
 //Create New Users
@@ -39,6 +45,9 @@ export async function saveNewUserService(newUser: User): Promise<User> {
 
         //we should probably make sure that username has no spaces in it or that we replace them with -
         await saveProfilePicture(contentType, imageBase64Data, `users/${newUser.username}/profile.${contentType}`)
+        //with event driven design after I completed the save a user process
+        //I send an event saying tis done with the relevent info
+        expressEventEmitter.emit(customExpressEvents.NEW_USER, newUser)
         return savedUser
     } catch (e) {
         console.log(e)

@@ -11,7 +11,8 @@ import { NewUserComponent } from './components/NewUserComponent/NewUserComponent
 import {ToastContainer} from 'react-toastify';
 import { makeStyles } from '@material-ui/core';
 import { EditProfile } from './components/EditProfileComponent/EditProfile';
-import { findByText } from '@testing-library/react';
+//import { LocationComponent } from './components/LocationComponent/LocationComponent';
+//import { AllUsersInLocationComponent } from './components/AllUsersInLocationComponent/AllUsersInLocationComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,6 +38,8 @@ function App() {
         <Route path='/edit/:userId' component={EditProfile} />
         <Route path='/users' component={AllUsersComponent} /> 
         <Route path='/new-user' component={NewUserComponent} />
+        {/* <Route path='/location' component={AllUsersInLocationComponent} /> */}
+        {/* <Route path='/location' render={(props) => ( <LocationComponent city={city, state} {...props} /> )} /> */}
         <ToastContainer position='bottom-right'/>
       </Router>
     </div>

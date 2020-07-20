@@ -179,7 +179,7 @@ export const NewUserComponent: FunctionComponent<any> = (props) => {
 
                 </Grid>
                 <br /><br />
-                <Button type='submit' variant="outlined" className={classes.button}>Submit</Button>
+                <Button type='submit' variant="outlined" className={classes.button}>Register</Button>
             </form>
         </div>
     )

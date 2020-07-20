@@ -187,9 +187,36 @@ export async function getUserById(id: number): Promise<User> {
     }
 }
 
-//Get Users By City
-
-//Get Users By State
+//Get Users By City & State
+export async function getUsersByLocation(city:string, state:string):Promise<User[]> {
+    let client: PoolClient
+    try {
+        client = await connectionPool.connect()
+        let results = await client.query(`select u."user_id", 
+        u."username", 
+        u."password", 
+        u."first_name", 
+        u."last_name", 
+        u."email",
+        u."city",
+        u."state",
+        u."dog_name",
+        u."breed",
+        r."role_id", 
+        r."role",
+        u."image" from puppy_pals_site.users u
+    left join puppy_pals_site.roles r 
+        on u."role" = r."role_id"
+    where "city"=$1 and "state"= $2
+    order by u.user_id;`, [city,state])
+        return results.rows.map(UserDTOtoUserConverter)
+    } catch (e) {
+        console.log(e);
+        throw new Error('Unhandled Error Occured')
+    } finally {
+        client && client.release()
+    }
+}
 
 //Get Users By Breed
 

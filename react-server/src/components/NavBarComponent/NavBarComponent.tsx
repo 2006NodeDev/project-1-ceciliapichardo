@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import { FormControlLabel, FormGroup, Switch } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { LogOutComponent } from '../LogOutComponent/LogOutComponent';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,7 +73,8 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
     menuItems.push(
       // <MenuItem onClick={handleClose}><Link to='/title'>Title</Link></MenuItem>,
       <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user) ? props.user.userId : '0'}`}>My Profile</Link></MenuItem>,
-      <MenuItem onClick={handleClose}><Link to={`/edit/${(props.user) ? props.user.userId : '0'}`}>Edit Profile</Link></MenuItem>
+      <MenuItem onClick={handleClose}><Link to={`/edit/${(props.user) ? props.user.userId : '0'}`}>Edit Profile</Link></MenuItem>,
+      <MenuItem onClick={handleClose}><Link to={'/location'}>Search By Location</Link></MenuItem>
     )
   }
   // menuItems.push(
@@ -153,6 +155,7 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
           )} */}
         </Toolbar>
       </AppBar>
+      <LogOutComponent />
     </div>
   );
   /*
