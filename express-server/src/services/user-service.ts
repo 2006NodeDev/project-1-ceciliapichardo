@@ -71,7 +71,7 @@ export async function updateUserService(updatedUser: User): Promise<User> {
         //we need to save new user data to the sql database
         let updatedUserInfo = await updateUserInfo(updatedUser)
         await saveProfilePicture(contentType, imageBase64Data, `users/${updatedUser.username}/profile.${contentType}`)
-
+        expressEventEmitter.emit(customExpressEvents.NEW_USER, updatedUserInfo)
         return updatedUserInfo
     } catch (e) {
         console.log(e);

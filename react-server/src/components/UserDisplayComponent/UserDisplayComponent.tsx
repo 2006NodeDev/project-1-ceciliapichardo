@@ -1,11 +1,10 @@
 import React, { FunctionComponent } from 'react'
 import { User } from '../../models/User'
-import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button'
-import { GridListTileBar, IconButton, GridListTile } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
+import {  Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, Container, CssBaseline, IconButton } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import clsx from 'clsx';
 
 interface IUserDisplayProps {
    user: User
@@ -19,11 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
          justifyContent: 'space-around',
          overflow: 'hidden',
          backgroundColor: theme.palette.background.paper,
-         //'& > *': {
-         //  margin: theme.spacing(1),
-         //  width: theme.spacing(20),
-         //  height: theme.spacing(30),
-         //},
+         minWidth: 150,
       },
       gridList: {
          display: 'flex',
@@ -34,54 +29,82 @@ const useStyles = makeStyles((theme: Theme) =>
       icon: {
          color: 'rgba(255, 255, 255, 0.54)',
       },
-      //paper:{
-      //     backgroundColor:'grey' 
-      // }
+      media: {
+         height: 0,
+         paddingTop:'75%'
+      },
+      expand: {
+         transform: 'rotate(0deg)',
+         marginLeft: 'auto',
+         transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+         }),
+      },
+      expandOpen: {
+         transform: 'rotate(180deg)',
+      },
    }),
 );
 
 
 export const UserDisplayComponent: FunctionComponent<IUserDisplayProps> = (props) => {
    let classes = useStyles()
+   const [expanded, setExpanded] = React.useState(false);
+
+   const handleExpandClick = () => {
+      setExpanded(!expanded);
+   };
+
    return (
-      <div className={classes.root}>
-         <GridListTile key={props.user.userId}>
-            <img src={props.user.image} alt={props.user.username} width="300" height="400" />
-            <GridListTileBar
-               title={<span>{props.user.firstName} and {props.user.dogName}</span>}
-               subtitle={<span>{props.user.city}, {props.user.state}</span>}
-               actionIcon={
-                  <IconButton aria-label={`info about ${props.user.username}`} className={classes.icon}>
-                     <InfoIcon />
+      <div>
+         <React.Fragment>
+            <CssBaseline />
+            <Container maxWidth="sm">
+               <Card className={classes.root}></Card>
+               <CardHeader
+                  title={<span>{props.user.firstName} and {props.user.dogName}</span>}
+                  subheader={<span>{props.user.city}</span>}
+               />
+               <CardMedia
+                  className={classes.media}
+                  image={props.user.image}
+                  title={props.user.username}
+               />
+               <CardContent>
+               {/* <Typography variant="body2" color="textSecondary" component="p">
+                  Description
+               </Typography> */}
+               </CardContent>
+               <CardActions disableSpacing>
+                  <IconButton
+                     className={clsx(classes.expand, {
+                        [classes.expandOpen]: expanded,
+                     })}
+                     onClick={handleExpandClick}
+                     aria-expanded={expanded}
+                     aria-label="show more"
+                  >
+                     <ExpandMoreIcon />
                   </IconButton>
-               }
-            />
-         </GridListTile>
-         {/* <Paper className={classes.paper} variant="outlined" square>
-                <Typography variant='body1'>
-                   Username : {props.user.username}
-                </Typography>
-                <Typography variant='body1'>
-                   First Name : {props.user.firstName}
-                </Typography>
-                <Typography variant='body1'>
-                   Last Name : {props.user.lastName}
-                </Typography>
-                <Typography variant='body1'>
-                   Email : {props.user.email}
-                </Typography>
-                <Typography variant='body1'>
-                   PuppyPal : {props.user.dogName}
-                </Typography>
-                <Typography variant='body1'>
-                   Breed : {props.user.breed}
-                </Typography>
-                <Typography variant='body1'>
-                   Location : {props.user.city}, {props.user.state}
-                </Typography>
-                <img src={props.user.image} alt="Profile Picture" width="200" height="300"/>
-                <Button variant='contained' color='inherit'>Edit</Button>
-            </Paper> */}
+               </CardActions>
+               <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <CardContent>
+                     <Typography variant="body2" color="textSecondary" component="p">
+                        Bio
+                     </Typography>
+                     <Typography paragraph>
+                        {props.user.dogName} is a {props.user.breed}
+                     </Typography>
+                     <Typography paragraph>
+                        {props.user.firstName} {props.user.lastName} and {props.user.dogName} live in {props.user.city}, {props.user.state}
+                     </Typography>
+                     <Typography paragraph>
+                        Email {props.user.firstName} for playdates at {props.user.email}
+                     </Typography>
+                  </CardContent>
+               </Collapse>
+            </Container>
+         </React.Fragment>
       </div>
    )
 }

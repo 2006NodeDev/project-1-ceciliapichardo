@@ -5,9 +5,6 @@ import { useParams } from 'react-router';
 import { editUser } from '../../remote/react-server-api/edit-user';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
-// interface EditUserProps {
-//     user: User | null
-// }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,11 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-//export const EditProfile: FunctionComponent<EditUserProps> = (props) => {
 export const EditProfile: FunctionComponent<any> = (props) => {
     const classes = useStyles();
 
-    //let [userProfile, changeUserProfile] = useState<null | User>(null)
     const {userId} = useParams()//come from match.params which is provided by router
     let [username, changeUsername] = useState('')
     let [password, changePassword] = useState('')
@@ -138,8 +133,8 @@ export const EditProfile: FunctionComponent<any> = (props) => {
     const updateUser = async (e: SyntheticEvent) => {
         e.preventDefault()
         
-        let updatedUser: User = { //*** not sure why this id isnt working */
-            userId: userId, //props.user.userId, //userProfile.userId,
+        let updatedUser: User = {
+            userId: userId,
             username,
             password,
             firstName,
@@ -153,11 +148,8 @@ export const EditProfile: FunctionComponent<any> = (props) => {
             image
         }
         try { 
-
-            //let res = await editUser(updatedUser)
             await editUser(updatedUser)
             console.log(updatedUser);
-            //props.history.push(`/profile/${res.userId}`)
             props.history.push(`/profile/${userId}`)
 
         } catch (e) {
@@ -185,7 +177,7 @@ export const EditProfile: FunctionComponent<any> = (props) => {
                             <PhotoCamera />
                         </IconButton>
                     </label>
-                    <img src={image || ''} width={5} height={15} />
+                    <img src={image || null} width="125" height="160" />
                     
                     <TextField required id="standard-basic" label="Username" value={username} onChange={updateUsername} />
                     <TextField id="standard-basic" type='password' label="Update Password" value={password} onChange={updatePassword} />
@@ -199,7 +191,6 @@ export const EditProfile: FunctionComponent<any> = (props) => {
                 </Grid>
                 <br /><br />
                 <Button type='submit' variant="outlined" className={classes.button}>Save</Button>
-                {/* <Button variant="contained" type="submit">Submit</Button> */}
             </form>
         </div>
     );

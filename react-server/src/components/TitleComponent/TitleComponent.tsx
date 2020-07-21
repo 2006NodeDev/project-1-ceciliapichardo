@@ -29,8 +29,5 @@ export const TitleComponent:FunctionComponent<ITitleComponentProps> = (props) =>
             );
         }
     }
-    //return (  
-        //<h3>{props.title}</h3>
-    //);
-} //purposeof this component is to take in a title value from its parent then display it in a nice manner
+} 
 

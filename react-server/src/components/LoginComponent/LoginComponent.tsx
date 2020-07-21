@@ -6,7 +6,6 @@ import { reactLogin } from '../../remote/react-server-api/login';
 import { makeStyles, createStyles, Theme, InputAdornment } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-//the interface called route component props just defines history match and location
 interface ILoginProps extends RouteComponentProps{
     changeCurrentUser:(newUser:any)=>void
 }
@@ -41,23 +40,17 @@ export const LoginComponent:FunctionComponent<ILoginProps> = (props) => {
         changePassword(event.currentTarget.value)
     }
 
-    const loginSubmit = async (e:SyntheticEvent) => {//sythentic events are react interface for converting between the many different types of browser events
+    const loginSubmit = async (e:SyntheticEvent) => {
         e.preventDefault()
         let res = await reactLogin(username, password)
         props.changeCurrentUser(res)
         changePassword('')
-        //props.history.push(`/profile/${res.userId}`)
-        //props.history.push(`/profile/${props.user.userId}`)
         props.history.push(`/profile/${res.userId}`)
     }
 
     return (
         <div> <br/><br/><br/><br/><br/><br/><br/>
-            {/* by default the submit event in a form tries to send a get request to the href value in the form */}
             <form autoComplete="off" onSubmit={loginSubmit}>
-                {/*<TextField id="standard-basic" label="Username" value={username} onChange={updateUsername}/>
-                <TextField id="standard-basic" type='password' label="Password" value={password} onChange={updatePassword} />
-                <Button type='submit' variant="contained" color="primary">Login</Button> */}
                 <TextField
                     className={classes.margin}
                     required

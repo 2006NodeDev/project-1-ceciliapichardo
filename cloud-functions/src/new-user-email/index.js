@@ -12,7 +12,7 @@ const messageTemplate = {
     from: process.env['EMAIL'],
     to: '',
     subject: 'Welcome to Puppy Pals!',
-    text: 'I hope you enjoy your new account :)'
+    text: 'I hope you enjoy your new account :) -PuppyPals Team'
 }
 
 /**
