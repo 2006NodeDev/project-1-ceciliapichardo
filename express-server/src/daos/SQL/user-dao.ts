@@ -42,58 +42,7 @@ export async function saveAUser(newUser: User): Promise<User> {
     try {
         client = await connectionPool.connect()
         await client.query('BEGIN;')
-        /*
-        let city = await client.query(`select c."city_id" from puppy_pals_site.cities c where c."city" = $1;`, [newUser.city]) //check if city exists
-        let cityId = undefined;
-        if (city.rowCount === 0) {
-            city = await client.query(`insert into puppy_pals_site.cities  ("city") values ($1) returning "city_id";`, [newUser.city]) //if not, insert it and return city_id
-            cityId = city.rows[0].city_id
-            
-            if(cityId === 0) {
-                throw new Error('City Not Found')
-            }
-        }
-        else {
-            cityId = city.rows[0].city_id
-            if(cityId === 0) {
-                throw new Error('City Not Found')
-            }
-        }
-        let state = await client.query(`select s."state_id" from puppy_pals_site.states s where "state" = $1;`, [newUser.state]) //select state_id from table
-        let stateId = state.rows[0].state_id
-        
-        if (stateId.rowCount === 0) {
-            throw new Error('State Not Found')
-        }
-        let dogSex = await client.query(`select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = $1;`, [newUser.dogSex]) //select sex_id from table
-        let dogSexId = dogSex.rows[0].sex_id
-        
-        if (dogSexId === 0) {
-            throw new Error('Sex Not Found')
-        }
 
-        let breed = await client.query(`select db."breed_id" from puppy_pals_site.dog_breeds db where db."breed" = $1;`, [newUser.breed]) //check if breed exists
-        let breedId = undefined;
-        
-        if (breed.rowCount === 0) {
-            breed = await client.query(`insert into puppy_pals_site.dog_breeds ("breed") values ($1) returning "breed_id";`, [newUser.breed]) //if not, insert it and return breed_id
-            breedId = breed.rows[0].breed_id;
-
-            if(breedId === 0) {
-                throw new Error('Breed Not Found')
-            }
-        }
-        else {
-            breedId = breed.rows[0].breed_id
-            if(breedId === 0) {
-                throw new Error('Breed Not Found')
-            }
-        } 
-        //Finally create New User
-        let results = await client.query(`insert into puppy_pals_site.users ("username", "password", "first_name", "last_name", "email", "city", "state", "country", "dog_name", "dog_sex", "breed", "role", "image")
-                                            values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) returning "user_id";`,
-            [newUser.username, newUser.password, newUser.firstName, newUser.lastName, newUser.email, cityId, stateId, newUser.country.countryId, newUser.dogName, dogSexId, breedId, newUser.role.roleId, newUser.image])
-            */
         let results = await client.query(`insert into puppy_pals_site.users ("username", "password", "first_name", "last_name", "email", "city", "state", "dog_name", "breed", "role", "image")
                                             values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) returning "user_id";`,
             [newUser.username, newUser.password, newUser.firstName, newUser.lastName, newUser.email, newUser.city, newUser.state, newUser.dogName, newUser.breed, newUser.role.roleId, newUser.image])
@@ -102,9 +51,6 @@ export async function saveAUser(newUser: User): Promise<User> {
         return newUser
     } catch (e) {
         client && client.query('ROLLBACK;')
-        //if (e.message === 'City Not Found' || e.message === 'State Not Found' && e.message === 'Sex Not Found' || e.message === 'Breed Not Found') {
-            //throw new UserInputError()
-        //}
         console.log(e);
         throw new Error('Unhandled Error Occured')
     } finally {
@@ -249,23 +195,10 @@ export async function updateUserInfo(updatedUserInfo: User): Promise<User> {
                 [updatedUserInfo.email, updatedUserInfo.userId])
         }
         if (updatedUserInfo.city) {
-            /* let cityId = await client.query(`select c."city_id" from puppy_pals_site.cities c where c."city" = $1;`,
-                [updatedUserInfo.city])
-            if (cityId.rowCount === 0) {
-                throw new Error('City Not Found')
-            }
-            cityId = cityId.rows[0].city_id */
             await client.query(`update puppy_pals_site.users set "city" = $1 where "user_id" = $2;`,
-                //[cityId, updatedUserInfo.userId])
                 [updatedUserInfo.city, updatedUserInfo.userId])
         }
         if (updatedUserInfo.state) {
-            /*let stateId = await client.query(`select s."state_id" from puppy_pals_site.states s where s."state" = $1;`,
-                [updatedUserInfo.state])
-            if (stateId.rowCount === 0) {
-                throw new Error('State Not Found')
-            }
-            stateId = stateId.rows[0].state_id */
             await client.query(`update puppy_pals_site.users set "state" = $1 where "user_id" = $2;`,
                 //[stateId, updatedUserInfo.userId])
                 [updatedUserInfo.state, updatedUserInfo.userId])
@@ -274,25 +207,8 @@ export async function updateUserInfo(updatedUserInfo: User): Promise<User> {
             await client.query(`update puppy_pals_site.users set "dog_name" = $1 where "user_id" = $2;`,
                 [updatedUserInfo.dogName, updatedUserInfo.userId])
         }
-        /*if (updatedUserInfo.dogSex) {
-            /*let sexId = await client.query(`select sod."sex_id" from puppy_pals_site.sex_of_dog sod where sod."dog_sex" = $1;`,
-                [updatedUserInfo.dogSex])
-            if (sexId.rowCount === 0) {
-                throw new Error('Sex Not Found')
-            }
-            sexId = sexId.rows[0].sex_id
-            await client.query(`update puppy_pals_site.users set "dog_sex" = $1 where "user_id" = $2;`,
-                [sexId, updatedUserInfo.userId])
-        } */
         if (updatedUserInfo.breed) {
-           /* let breedId = await client.query(`select db."breed_id" from puppy_pals_site.dog_breeds db where db."breed" = $1;`,
-                [updatedUserInfo.breed])
-            if (breedId.rowCount === 0) {
-                throw new Error('Breed Not Found')
-            }
-            breedId = breedId.rows[0].breed_id */
             await client.query(`update puppy_pals_site.users set "breed" = $1 where "user_id" = $2;`,
-                //[breedId, updatedUserInfo.userId])
                 [updatedUserInfo.breed, updatedUserInfo.userId])
         }
         if (updatedUserInfo.image) {

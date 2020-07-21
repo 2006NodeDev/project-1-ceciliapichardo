@@ -9,7 +9,7 @@ export const userRouter = express.Router()
 
 //Create New Users
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
+    //console.log(req.body);
     let { username,
         password,
         firstName,
