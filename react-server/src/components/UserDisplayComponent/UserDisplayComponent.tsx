@@ -71,9 +71,9 @@ export const UserDisplayComponent: FunctionComponent<IUserDisplayProps> = (props
                   title={props.user.username}
                />
                <CardContent>
-               {/* <Typography variant="body2" color="textSecondary" component="p">
-                  Description
-               </Typography> */}
+               <Typography variant="body2" color="textSecondary" component="p">
+                  Expand for More
+               </Typography>
                </CardContent>
                <CardActions disableSpacing>
                   <IconButton

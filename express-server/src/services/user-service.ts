@@ -29,22 +29,32 @@ export async function getUsersByLocationService(city:string, state:string): Prom
 export async function saveNewUserService(newUser: User): Promise<User> {
     //two major process to manage in this function
     try {
-        let base64Image = newUser.image
-        let [dataType, imageBase64Data] = base64Image.split(';base64,')// gets us the two important parts of the base 64 string
-        //we need to make sure picture is in the right format
-        let contentType = dataType.split('/').pop()// split our string that looks like data:image/ext into ['data:image' , 'ext']
+        // let base64Image = newUser.image
+        // let [dataType, imageBase64Data] = base64Image.split(';base64,')// gets us the two important parts of the base 64 string
+        // //we need to make sure picture is in the right format
+        // let contentType = dataType.split('/').pop()// split our string that looks like data:image/ext into ['data:image' , 'ext']
         //then the pop method gets us the last thing in the array
         //we need to add the picture path to the user data in the sql database
+        let savedUser = undefined
         if (newUser.image) {
+            let base64Image = newUser.image
+            let [dataType, imageBase64Data] = base64Image.split(';base64,')// gets us the two important parts of the base 64 string
+            //we need to make sure picture is in the right format
+            let contentType = dataType.split('/').pop()// split our string that looks like data:image/ext into ['data:image' , 'ext']
             newUser.image = `${bucketBaseUrl}/users/${newUser.username}/profile.${contentType}`
+            savedUser = await saveAUser(newUser)
+            await saveProfilePicture(contentType, imageBase64Data, `users/${newUser.username}/profile.${contentType}`)
+        } 
+        else {
+            savedUser = await saveAUser(newUser)
         }
         //we need to save new user data to the sql database
-        let savedUser = await saveAUser(newUser)
+        // let savedUser = await saveAUser(newUser)
 
         //we need to save a picture to cloud storage 
 
         //we should probably make sure that username has no spaces in it or that we replace them with -
-        await saveProfilePicture(contentType, imageBase64Data, `users/${newUser.username}/profile.${contentType}`)
+        // await saveProfilePicture(contentType, imageBase64Data, `users/${newUser.username}/profile.${contentType}`)
         //with event driven design after I completed the save a user process
         //I send an event saying tis done with the relevent info
         expressEventEmitter.emit(customExpressEvents.NEW_USER, newUser)
@@ -61,16 +71,24 @@ export async function saveNewUserService(newUser: User): Promise<User> {
 //Update User
 export async function updateUserService(updatedUser: User): Promise<User> {
     try {
-        let base64Image = updatedUser.image
-        let [dataType, imageBase64Data] = base64Image.split(';base64,')
-        let contentType = dataType.split('/').pop()
-
+        // let base64Image = updatedUser.image
+        // let [dataType, imageBase64Data] = base64Image.split(';base64,')
+        // let contentType = dataType.split('/').pop()
+        let updatedUserInfo = undefined
         if (updatedUser.image) {
+            let base64Image = updatedUser.image
+            let [dataType, imageBase64Data] = base64Image.split(';base64,')
+            let contentType = dataType.split('/').pop()
             updatedUser.image = `${bucketBaseUrl}/users/${updatedUser.username}/profile.${contentType}`
+            updatedUserInfo = await updateUserInfo(updatedUser)
+            await saveProfilePicture(contentType, imageBase64Data, `users/${updatedUser.username}/profile.${contentType}`)
+        }
+        else {
+            updatedUserInfo = await updateUserInfo(updatedUser)
         }
         //we need to save new user data to the sql database
-        let updatedUserInfo = await updateUserInfo(updatedUser)
-        await saveProfilePicture(contentType, imageBase64Data, `users/${updatedUser.username}/profile.${contentType}`)
+        //let updatedUserInfo = await updateUserInfo(updatedUser)
+        // await saveProfilePicture(contentType, imageBase64Data, `users/${updatedUser.username}/profile.${contentType}`)
         expressEventEmitter.emit(customExpressEvents.NEW_USER, updatedUserInfo)
         return updatedUserInfo
     } catch (e) {

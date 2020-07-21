@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
         color: '#ff5722',
-        borderColor: '#ff5722'
+        borderColor: '#ff5722',
+        bottom: 10
     },
     input: {
         display: 'none',
