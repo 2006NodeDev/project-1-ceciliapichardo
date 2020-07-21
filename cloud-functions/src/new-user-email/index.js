@@ -15,8 +15,6 @@ const messageTemplate = {
     text: 'I hope you enjoy your new account :)'
 }
 
-
-
 /**
  * Triggered from a message on a Cloud Pub/Sub topic.
  *
@@ -28,14 +26,12 @@ exports.newUserEmail = (event, context) => {
     messageTemplate.to = newUser.email
     transporter.sendMail(messageTemplate)
 };
- 
-  
 
 // //for testing the function by mimicing a pub event
 // let payload = {
 //     username:'Cecilia',
 //     jobTitle:'Complicated',
-//     email:'cecmaria23@gmail.com'
+//     email:'project1nodedev@gmail.com'
 // }
 // //to mimic the event
 // let event = {

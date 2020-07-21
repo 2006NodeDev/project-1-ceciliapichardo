@@ -2,7 +2,7 @@ import { loginWithUsernameAndPassword, getAllUsers, getUserById, saveAUser, upda
 import { User } from "../models/User"
 import { saveProfilePicture } from "../daos/Cloud-Storage/user-images"
 import { bucketBaseUrl } from "../daos/Cloud-Storage"
-import { customExpressEvents, expressEventEmitter } from "../event-listening"
+import { customExpressEvents, expressEventEmitter } from "../event-listeners"
 //calls the dao
 
 //Login a User
