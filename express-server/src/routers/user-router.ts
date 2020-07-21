@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'
-import { authenticationMiddleware } from '../middleware/authentication-middleware'
-import { authorizationMiddleware } from '../middleware/authorization-middleware'
+//import { authenticationMiddleware } from '../middleware/authentication-middleware'
+//import { authorizationMiddleware } from '../middleware/authorization-middleware'
 import { User } from '../models/User'
 import { UserInputError } from '../errors/UserInputError'
 import { saveNewUserService, getUserByIdService, getAllUsersService, updateUserService, getUsersByLocationService } from '../services/user-service'
@@ -135,10 +135,10 @@ userRouter.post('/location', async (req:Request, res:Response, next:NextFunction
     }
 })
 
-userRouter.use(authenticationMiddleware)
+// userRouter.use(authenticationMiddleware)
 
 //Find All Users 
-userRouter.get('/', authorizationMiddleware(['Admin']), async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         let allUsers = await getAllUsersService()
         res.json(allUsers)
@@ -150,7 +150,7 @@ userRouter.get('/', authorizationMiddleware(['Admin']), async (req: Request, res
 //Find Users By Id ***Admin still cant search for themself, 
 //might be okay for this project since searching for other users is not mandatory 
 //'Admin',
-userRouter.get('/:id', authorizationMiddleware(['Current']), async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     let { id } = req.params
     if (isNaN(+id)) {
         res.status(400).send('Id Needs to be a Number')

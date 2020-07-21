@@ -69,12 +69,13 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
     menuItems.push(
       <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user) ? props.user.userId : '0'}`}>My Profile</Link></MenuItem>,
       <MenuItem onClick={handleClose}><Link to={`/edit/${(props.user) ? props.user.userId : '0'}`}>Edit Profile</Link></MenuItem>,
+      <MenuItem onClick={handleClose}><Link to='/users'>All Users</Link></MenuItem>
       // <MenuItem onClick={handleClose}><Link to={'/location'}>Search By Location</Link></MenuItem>
     )
   }
-  if (props.user && props.user.role.role === 'Admin') {
-    menuItems.push(<MenuItem onClick={handleClose}><Link to='/users'>All Users</Link></MenuItem>)
-  }
+  // if (props.user && props.user.role.role === 'Admin') {
+  //   menuItems.push(<MenuItem onClick={handleClose}><Link to='/users'>All Users</Link></MenuItem>)
+  // }
 
   return (
     <div className={classes.root} >
