@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { NavBarComponent } from './components/NavBarComponent/NavBarComponent';
 import { User } from './models/User';
 import { TitleComponent } from './components/TitleComponent/TitleComponent';
@@ -31,8 +31,8 @@ function App() {
     <div className={classes.root} style={ {border: '3px solid #ff5722' } }>
       <Router>
         <header><NavBarComponent user={currentUser}/></header>
-        {/* <NavBarComponent user={currentUser}/> */}
-        {/* <Route path='title' render={(props) => ( <TitleComponent title={'First Title'} size='large'/> )} /> */}
+        {/* <Route path='title' render={(props) => ( <TitleComponent title={'Welcome!'} size='large'/> )} /> */}
+        <Redirect to='/login'/>
         <Route path='/login' render={(props) => ( <LoginComponent changeCurrentUser={changeCurrentUser} {...props} /> )} />
         <Route path='/profile/:userId' component={ProfileComponent} />
         <Route path='/edit/:userId' component={EditProfile} />
